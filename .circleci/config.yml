@@ -96,7 +96,8 @@ jobs:
       - run:
           name: Release
           command: |
-            sudo bash <(curl https://raw.githubusercontent.com/babashka/babashka/master/install)
+            curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+            sudo ./install
             .circleci/script/release
       - save_cache:
           paths:
@@ -157,7 +158,8 @@ jobs:
       - run:
           name: Release
           command: |
-            sudo bash <(curl https://raw.githubusercontent.com/babashka/babashka/master/install)
+            curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+            sudo ./install
             .circleci/script/release
       - save_cache:
           paths:
@@ -217,7 +219,8 @@ jobs:
       - run:
           name: Release
           command: |
-            sudo bash <(curl https://raw.githubusercontent.com/babashka/babashka/master/install)
+            curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+            sudo ./install
             .circleci/script/release
       - save_cache:
           paths:
