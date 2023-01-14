@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
 rm -rf /tmp/release
 mkdir -p /tmp/release
 cp pod-babashka-instaparse /tmp/release
 VERSION=$(cat resources/POD_BABASHKA_INSTAPARSE_VERSION)
 
-cd /tmp/release
+pushd /tmp/release
 
 ## release binary as zip archive
 
 zip "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip" pod-babashka-instaparse
 
-bb release-artifact --file "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip"
-
-## cleanup
-
 rm pod-babashka-instaparse
+
+popd
+
+bb release-artifact --file "/tmp/release/pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip"
