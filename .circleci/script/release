@@ -2,15 +2,15 @@
 
 rm -rf /tmp/release
 mkdir -p /tmp/release
-cp pod-babashka-buddy /tmp/release
-VERSION=$(cat resources/POD_BABASHKA_BUDDY_VERSION)
+cp pod-babashka-instaparse /tmp/release
+VERSION=$(cat resources/POD_BABASHKA_INSTAPARSE_VERSION)
 
 cd /tmp/release
 
 ## release binary as zip archive
 
-zip "pod-babashka-buddy-$VERSION-$APP_PLATFORM-$APP_ARCH.zip" pod-babashka-buddy
+zip "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip" pod-babashka-instaparse
 
 ## cleanup
 
-rm pod-babashka-buddy
+rm pod-babashka-instaparse
