@@ -11,7 +11,7 @@ cd /tmp/release
 
 zip "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip" pod-babashka-instaparse
 
-./bb release-artifact --file "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip"
+bb release-artifact --file "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip"
 
 ## cleanup
 
