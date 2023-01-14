@@ -1,6 +1,5 @@
 (ns release-artifact
   (:require
-   [babashka.fs :as fs]
    [borkdude.gh-release-artifact :as ghr]
    [clojure.java.shell :refer [sh]]
    [clojure.string :as str]))
@@ -15,10 +14,7 @@
           :out
           str/trim)))
 
-(defn release [{:keys [file]
-                :or {file (if (fs/windows?)
-                            "pod-babashka-instaparse.exe"
-                            "pod-babashka-instaparse")}}]
+(defn release [{:keys [file]}]
   (let [ght (System/getenv "GITHUB_TOKEN")
         _ (when ght (println "Github token found"))
         _ (println "File" file)

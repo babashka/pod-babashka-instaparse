@@ -28,9 +28,9 @@ task:
 
     VERSION=$(cat resources/POD_BABASHKA_INSTAPARSE_VERSION)
     arch=${BABASHKA_ARCH:-amd64}
-    archive="pod-babashka-instaparse-$VERSION-$BABASHKA_PLATFORM-$arch.tar.gz"
-    tar zcvf "$archive" pod-babashka-instaparse
+    archive="pod-babashka-instaparse-$VERSION-$BABASHKA_PLATFORM-$arch.zip"
+    zip "$archive" pod-babashka-instaparse
     bash <(curl https://raw.githubusercontent.com/babashka/babashka/master/install) --dir .
-    ./bb release-artifact "$archive" || true
+    ./bb release-artifact --file "$archive" || true
   binaries_artifacts:
-    path: "pod-babashka-instaparse*.tar.gz"
+    path: "pod-babashka-instaparse*.zip"
