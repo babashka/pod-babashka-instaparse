@@ -97,6 +97,7 @@ jobs:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+            chmod +x install
             sudo ./install
             .circleci/script/release
       - save_cache:
@@ -159,6 +160,7 @@ jobs:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+            chmod +x install
             sudo ./install
             .circleci/script/release
       - save_cache:
@@ -220,6 +222,7 @@ jobs:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+            chmod +x install
             sudo ./install
             .circleci/script/release
       - save_cache:
