@@ -1,7 +1,9 @@
 (ns release-artifact
-  (:require [borkdude.gh-release-artifact :as ghr]
-            [clojure.java.shell :refer [sh]]
-            [clojure.string :as str]))
+  (:require
+   [babashka.fs :as fs]
+   [borkdude.gh-release-artifact :as ghr]
+   [clojure.java.shell :refer [sh]]
+   [clojure.string :as str]))
 
 (defn current-branch []
   (or (System/getenv "APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH")
@@ -13,9 +15,12 @@
           :out
           str/trim)))
 
-(defn release [{:keys [file]}]
+(defn release [{:keys [file]
+                :or {file (if (fs/windows?)
+                            "pod-babashka-instaparse.exe"
+                            "pod-babashka-instaparse")}}]
   (let [ght (System/getenv "GITHUB_TOKEN")
-        _ (println "Github token found")
+        _ (when ght (println "Github token found"))
         _ (println "File" file)
         branch (current-branch)
         _ (println "On branch:" branch)
