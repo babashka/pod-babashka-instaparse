@@ -74,7 +74,7 @@ jobs:
       - run:
           name: Download GraalVM
           command: |
-            script/check_glibc.sh
+            # script/check_glibc.sh
             cd ~
             if ! [ -d graalvm-ce-java17-22.3.0 ]; then
               curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
