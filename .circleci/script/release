@@ -11,7 +11,7 @@ pushd /tmp/release
 
 ## release binary as zip archive
 
-APP_ARCH=${APP_ARCH:amd64}
+APP_ARCH=${APP_ARCH:-amd64}
 
 zip "pod-babashka-instaparse-$VERSION-$APP_PLATFORM-$APP_ARCH.zip" pod-babashka-instaparse
 
