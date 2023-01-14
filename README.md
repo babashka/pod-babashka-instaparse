@@ -2,6 +2,8 @@
 
 A pod exposing [Instaparse](https://github.com/Engelberg/instaparse) to babashka.
 
+It's recommended to use this pod via the [instaparse.bb](https://github.com/babashka/instaparse.bb) library.
+
 ## API
 
 Only a subset of instaparse is exposed. If you are missing functionality, please create an issue.
