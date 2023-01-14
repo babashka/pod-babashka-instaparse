@@ -8,7 +8,7 @@ if "%GRAALVM_HOME%"=="" (
 set JAVA_HOME=%GRAALVM_HOME%
 set PATH=%GRAALVM_HOME%\bin;%PATH%
 
-set /P VERSION=< resources\POD_BABASHKA_BUDDY_VERSION
+set /P VERSION=< resources\POD_BABASHKA_INSTAPARSE_VERSION
 echo Building version %VERSION%
 
 if "%GRAALVM_HOME%"=="" (
@@ -29,7 +29,7 @@ call %GRAALVM_HOME%\bin\native-image.cmd ^
   "--no-fallback" ^
   "--no-server" ^
   "-J-Xmx3g" ^
-  "pod.babashka.buddy"
+  "pod.babashka.instaparse"
 
 if %errorlevel% neq 0 exit /b %errorlevel%
 
