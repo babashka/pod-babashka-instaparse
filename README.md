@@ -6,7 +6,7 @@ A pod exposing [Instaparse](https://github.com/Engelberg/instaparse) to babashka
 
 Only a subset of instaparse is exposed. If you are missing functionality, please create an issue.
 
-### instaparse.core
+### pod.babashka.instaparse
 
 - `parser`
 - `parse`
@@ -26,7 +26,7 @@ Only a subset of instaparse is exposed. If you are missing functionality, please
 
 ;; loading the pod creates the instaparse.core namespace
 
-(require '[instaparse.core :as insta])
+(require '[pod.babashka.instaparse :as insta])
 
 (def as-and-bs
   (insta/parser

@@ -48,9 +48,9 @@
     (p s)))
 
 #_(def parser-wrapper (str '(do (defn parser [grammar]
-                                (let [p (-parser grammar)]
-                                  p #_(fn [s]
-                                    (-call-parser p s)))))))
+                                  (let [p (-parser grammar)]
+                                    p #_(fn [s]
+                                          (-call-parser p s)))))))
 
 (defn mark-failure [x]
   (if (insta/failure? x)
@@ -64,10 +64,11 @@
         mark-failure)))
 
 (def lookup*
-  {'instaparse.core {#_#_'-parser -parser
-                     'parse parse
-                     'parser -parser
-                     #_#_'-call-parser -call-parser}})
+  {'pod.babashka.instaparse
+   {#_#_'-parser -parser
+    'parse parse
+    'parser -parser
+    #_#_'-call-parser -call-parser}})
 
 (defn lookup [var]
   (let [var-ns (symbol (namespace var))
@@ -80,7 +81,7 @@
      (if (ident? v) (name v)
          v))
    {:format :transit+json
-    :namespaces [{:name "instaparse.core"
+    :namespaces [{:name "pod.babashka.instaparse"
                   :vars [#_{"name" "-parser"}
                          #_{"name" "-call-parser"}
                          {"name" "parser" #_#_"code" parser-wrapper}

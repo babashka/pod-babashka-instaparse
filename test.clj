@@ -6,7 +6,7 @@
   (pods/load-pod "./pod-babashka-instaparse")
   (pods/load-pod ["clojure" "-M" "-m" "pod.babashka.instaparse"]))
 
-(require '[instaparse.core :as insta])
+(require '[pod.babashka.instaparse :as insta])
 
 (def as-and-bs
   (insta/parser
