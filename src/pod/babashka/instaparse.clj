@@ -94,6 +94,11 @@
     (java.io.ByteArrayInputStream. (.getBytes v "utf-8"))
     :json)))
 
+(defn serialize [x]
+  (if (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x)
+    (seq x)
+    x))
+
 (defn write-transit [v]
   (let [baos (java.io.ByteArrayOutputStream.)]
     (transit/write (transit/writer baos :json) v)
@@ -122,7 +127,9 @@
                                 args (read-string args)
                                 args (read-transit args)]
                             (if-let [f (lookup var)]
-                              (let [value (write-transit (apply f args))
+                              (let [v (apply f args)
+                                    ;; _ (debug :value v :type (type v))
+                                    value (write-transit (serialize v))
                                     reply {"value" value
                                            "id" id
                                            "status" ["done"]}]
