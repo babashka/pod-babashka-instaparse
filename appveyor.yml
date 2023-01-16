@@ -56,7 +56,7 @@ build_script:
 
     set ARCHIVE=pod-babashka-instaparse-%VERSION%-windows-amd64.zip
 
-    bb release-artifact --file %ARCHIVE%
+    # bb release-artifact --file %ARCHIVE%
 
 artifacts:
 - path: pod-babashka-instaparse-*-windows-amd64.zip
