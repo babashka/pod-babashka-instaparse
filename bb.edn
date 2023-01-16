@@ -1,6 +1,6 @@
 {:paths [".build"]
  :deps {io.github.borkdude/gh-release-artifact
-        {:git/sha "0b0cb8ad9030debcb06137c28c86fed92c6c6ef7"}}
+        {:git/sha "b290f60fd68380485b613c711d98bea172f2f221"}}
  :tasks
  {uber (clojure "-T:build uber")
   release-artifact {:task (exec 'release-artifact/release)}}}
