@@ -52,11 +52,11 @@ build_script:
 - cmd: >-
     call script/compile.bat
 
-    set /P VERSION=< resources\POD_BABASHKA_BUDDY_VERSION
+    set /P VERSION=< resources\POD_BABASHKA_INSTAPARSE_VERSION
 
     set ARCHIVE=pod-babashka-instaparse-%VERSION%-windows-amd64.zip
 
-    REM bb release-artifact --file %ARCHIVE%
+    bb release-artifact --file %ARCHIVE%
 
 artifacts:
 - path: pod-babashka-instaparse-*-windows-amd64.zip
