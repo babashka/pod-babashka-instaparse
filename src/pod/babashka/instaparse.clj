@@ -63,10 +63,17 @@
     (-> (apply insta/parse p opts)
         mark-failure)))
 
+(defn parses [ref & opts]
+  (let [id (::id ref)
+        p (get @parsers id)]
+    (-> (apply insta/parses p opts)
+        mark-failure)))
+
 (def lookup*
   {'pod.babashka.instaparse
    {#_#_'-parser -parser
     'parse parse
+    'parses parses
     'parser -parser
     #_#_'-call-parser -call-parser}})
 
@@ -86,6 +93,7 @@
                          #_{"name" "-call-parser"}
                          {"name" "parser" #_#_"code" parser-wrapper}
                          {"name" "parse"}
+                         {"name" "parses"}
                          {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}]}]}))
 
 (defn read-transit [^String v]
@@ -94,10 +102,14 @@
     (java.io.ByteArrayInputStream. (.getBytes v "utf-8"))
     :json)))
 
-(defn serialize [x]
+(defn -serialize [x]
   (if (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x)
     (seq x)
     x))
+
+;; parses returns seqs of AutoFlattenSeqs.
+(defn serialize [x]
+  (clojure.walk/prewalk -serialize x))
 
 (defn write-transit [v]
   (let [baos (java.io.ByteArrayOutputStream.)]
