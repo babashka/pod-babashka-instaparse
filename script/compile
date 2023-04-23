@@ -17,7 +17,7 @@ clojure -T:build uber
 args=(-jar "pod-babashka-instaparse.jar"
       -H:Name=pod-babashka-instaparse
       -H:+ReportExceptionStackTraces
-       --verbose
+      --verbose
       --no-fallback
       --no-server
       "-J-Xmx3g"
