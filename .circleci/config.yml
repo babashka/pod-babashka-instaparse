@@ -31,8 +31,7 @@ jobs:
             sudo ./linux-install-1.11.1.1149.sh
       - run:
           name: Run JVM tests
-          command: |
-            bb test.clj
+          command: bb test.clj
       - save_cache:
           paths:
             - ~/.m2
@@ -87,8 +86,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: |
-            bb test.clj
+          command: bb test.clj
       # - run:
       #     name: Performance report
       #     command: |
@@ -155,8 +153,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: |
-	    bb test.clj
+          command: bb test.clj
       - run:
           name: Release
           command: |
@@ -213,8 +210,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: |
-            bb test.clj
+          command: bb test.clj
       # - run:
       #     name: Performance report
       #     command: |
