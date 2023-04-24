@@ -210,19 +210,19 @@ jobs:
             script/compile
           no_output_timeout: 30m
       - run:
-          name: Run tests
-          command: ./test.clj
-      # - run:
-      #     name: Performance report
-      #     command: |
-      #       .circleci/script/performance
-      - run:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
             chmod +x install
             sudo ./install
             .circleci/script/release
+      - run:
+          name: Run tests
+          command: ./test.clj
+      # - run:
+      #     name: Performance report
+      #     command: |
+      #       .circleci/script/performance
       - save_cache:
           paths:
             - ~/.m2
