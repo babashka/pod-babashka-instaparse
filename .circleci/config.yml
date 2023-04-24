@@ -153,15 +153,15 @@ jobs:
           command: script/compile
           no_output_timeout: 30m
       - run:
-          name: Run tests
-          command: bb test.clj
-      - run:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
             chmod +x install
             sudo ./install
             .circleci/script/release
+      - run:
+          name: Run tests
+          command: bb test.clj
       - save_cache:
           paths:
             - ~/.m2
