@@ -54,8 +54,25 @@
 
 (def commit-msg-parser (insta/parser commit-msg-grammar))
 
-(assert (seq? (insta/parse commit-msg-parser "feat: adding a new awesome feature")))
+(assert (= '([:TYPE "feat"] [:SUBJECT [:TEXT "adding a new awesome feature"]])
+           (insta/parse commit-msg-parser "feat: adding a new awesome feature")))
+
+(def commit-msg-parser-enlive (insta/parser commit-msg-grammar :output-format :enlive))
+
+;; test nested AutoFlattenSeqs are handled by serialize
+(assert (= '({:tag :TYPE, :content ("feat")}
+             {:tag :SUBJECT,
+              :content ({:tag :TEXT, :content ("adding a new awesome feature")})})
+           (insta/parse commit-msg-parser-enlive "feat: adding a new awesome feature")))
+
+(assert (seq? (insta/parse commit-msg-parser-enlive "feat: adding a new awesome feature")))
+
+(assert (= '(({:tag :TYPE, :content ("feat")}
+              {:tag :SUBJECT,
+               :content
+               ({:tag :TEXT, :content ("adding a new awesome feature")})}))
+           (insta/parses commit-msg-parser-enlive "feat: adding a new awesome feature") ))
 
 (when-not (= "executable" (System/getProperty "org.graalvm.nativeimage.kind"))
-  (shutdown-agents)
-  (System/exit 0))
+    (shutdown-agents)
+    (System/exit 0))

@@ -87,8 +87,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: |
-            script/test
+          command: ./test.clj
       # - run:
       #     name: Performance report
       #     command: |
@@ -154,15 +153,15 @@ jobs:
           command: script/compile
           no_output_timeout: 30m
       - run:
-          name: Run tests
-          command: script/test
-      - run:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
             chmod +x install
             sudo ./install
             .circleci/script/release
+      - run:
+          name: Run tests
+          command: ./test.clj
       - save_cache:
           paths:
             - ~/.m2
@@ -211,20 +210,19 @@ jobs:
             script/compile
           no_output_timeout: 30m
       - run:
-          name: Run tests
-          command: |
-            script/test
-      # - run:
-      #     name: Performance report
-      #     command: |
-      #       .circleci/script/performance
-      - run:
           name: Release
           command: |
             curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
             chmod +x install
             sudo ./install
             .circleci/script/release
+      - run:
+          name: Run tests
+          command: ./test.clj
+      # - run:
+      #     name: Performance report
+      #     command: |
+      #       .circleci/script/performance
       - save_cache:
           paths:
             - ~/.m2

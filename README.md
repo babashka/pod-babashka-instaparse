@@ -12,19 +12,20 @@ Only a subset of instaparse is exposed. If you are missing functionality, please
 
 - `parser`
 - `parse`
+- `parses`
 - `failure?`
 
 ## Differences with instaparse
 
 - Parser only works on a string grammar input
-- The result of `parser` must be used with `parse`, it cannot be called as a function directly
+- The result of `parser` must be used with `parse` or `parses`, it cannot be called as a function directly
 
 ## Example
 
 ``` clojure
 (require '[babashka.pods :as pods])
 
-(pods/load-pod 'org.babashka/instaparse "0.0.1")
+(pods/load-pod 'org.babashka/instaparse "0.0.3")
 
 ;; loading the pod creates the instaparse.core namespace
 
