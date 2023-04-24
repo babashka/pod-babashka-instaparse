@@ -105,11 +105,13 @@
 (defn auto-seq? [x]
   (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x))
 
+(defn serialize- [x]
+  (if (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x)
+    (seq x)
+    x))
+
 (defn serialize [x]
-  (cond
-    (auto-seq? x) (seq x)
-    (and (seq x) (some auto-seq? x)) (map #(if (auto-seq? %) (seq %) %) x)
-    :else x))
+  (clojure.walk/prewalk serialize- x))
 
 (defn write-transit [v]
   (let [baos (java.io.ByteArrayOutputStream.)]
