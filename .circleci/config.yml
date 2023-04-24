@@ -87,7 +87,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: bb test.clj
+          command: ./test.clj
       # - run:
       #     name: Performance report
       #     command: |
@@ -211,7 +211,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: bb test.clj
+          command: ./test.clj
       # - run:
       #     name: Performance report
       #     command: |
