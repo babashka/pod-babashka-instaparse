@@ -161,7 +161,7 @@ jobs:
             .circleci/script/release
       - run:
           name: Run tests
-          command: bb test.clj
+          command: ./test.clj
       - save_cache:
           paths:
             - ~/.m2
