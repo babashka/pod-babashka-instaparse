@@ -73,6 +73,6 @@
                ({:tag :TEXT, :content ("adding a new awesome feature")})}))
            (insta/parses commit-msg-parser-enlive "feat: adding a new awesome feature") ))
 
-#_(when-not (= "executable" (System/getProperty "org.graalvm.nativeimage.kind"))
+(when-not (= "executable" (System/getProperty "org.graalvm.nativeimage.kind"))
     (shutdown-agents)
     (System/exit 0))
