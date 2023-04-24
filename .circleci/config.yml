@@ -32,7 +32,7 @@ jobs:
       - run:
           name: Run JVM tests
           command: |
-            script/test
+            test.clj
       - save_cache:
           paths:
             - ~/.m2
@@ -88,7 +88,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            script/test
+            test.clj
       # - run:
       #     name: Performance report
       #     command: |
@@ -155,7 +155,7 @@ jobs:
           no_output_timeout: 30m
       - run:
           name: Run tests
-          command: script/test
+          command: test.clj
       - run:
           name: Release
           command: |
@@ -213,7 +213,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            script/test
+            test.clj
       # - run:
       #     name: Performance report
       #     command: |
