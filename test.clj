@@ -76,3 +76,12 @@
 (when-not (= "executable" (System/getProperty "org.graalvm.nativeimage.kind"))
     (shutdown-agents)
     (System/exit 0))
+
+(def regex-grammar-parser
+  (insta/parser
+   "S = A B
+    A = 'a'
+    B = #'b'"))
+
+;; would throw exception without regex serialization fix for #5
+(assert (insta/failure? (insta/parse regex-grammar-parser "ac")))
