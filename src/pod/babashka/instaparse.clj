@@ -112,8 +112,8 @@
                          {"name" "parse"}
                          {"name" "parses"}
                          {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}
-                         ;; register client side transit handlers when pod is loaded
-                         {"name" "reg-transit-handlers"
+                         ;; register client side transit handlers when pod is loaded. Implementation detail.
+                         {"name" "reg-transit-handlers-foo"
                           "code"  (reg-transit-handlers)}]}]}))
 
 (def regex-read-handler (transit/read-handler re-pattern))
