@@ -33,6 +33,23 @@
 (defn read [stream]
   (bencode/read-bencode stream))
 
+(def regex-key (str ::regex))
+
+(defn reg-transit-handlers
+  []
+  (format
+  "
+(babashka.pods/add-transit-read-handler!
+    \"%s\"
+    re-pattern)
+
+(babashka.pods/add-transit-write-handler!
+  #{java.util.regex.Pattern}
+  \"%s\"
+  str)
+" 
+   regex-key regex-key))
+
 (def parsers
   (atom {}))
 
@@ -94,13 +111,21 @@
                          {"name" "parser" #_#_"code" parser-wrapper}
                          {"name" "parse"}
                          {"name" "parses"}
-                         {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}]}]}))
+                         {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}
+                         ;; register client side transit handlers when pod is loaded. Implementation detail.
+                         {"name" "-reg-transit-handlers"
+                          "code"  (reg-transit-handlers)}]}]}))
+
+(def regex-read-handler (transit/read-handler re-pattern))
+
+(def regex-write-handler (transit/write-handler regex-key str))
 
 (defn read-transit [^String v]
   (transit/read
    (transit/reader
     (java.io.ByteArrayInputStream. (.getBytes v "utf-8"))
-    :json)))
+    :json
+    {:handlers {regex-key regex-read-handler}})))
 
 (defn auto-seq? [x]
   (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x))
@@ -113,9 +138,12 @@
 (defn serialize [x]
   (clojure.walk/prewalk serialize- x))
 
+
 (defn write-transit [v]
   (let [baos (java.io.ByteArrayOutputStream.)]
-    (transit/write (transit/writer baos :json) v)
+    (transit/write (transit/writer baos
+                                   :json
+                                   {:handlers {java.util.regex.Pattern regex-write-handler}}) v)
     (.toString baos "utf-8")))
 
 (defn -main [& _args]
