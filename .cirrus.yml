@@ -11,7 +11,7 @@ task:
     BABASHKA_ARCH: aarch64
     BABASHKA_TEST_ENV: native
     BABASHKA_XMX: "-J-Xmx6500m"
-    GITHUB_TOKEN: ENCRYPTED[2dfdcafc7d54acf9defc1b020a2d99bc5ac4bef2a50ec5e44f22cece9abb159b4df4a5f26abee3bb5e3efe52c544a561]
+    GITHUB_TOKEN: ENCRYPTED[c988eca73b9ce622c262f1dbd01fe31f77de5a438a00643d62fed97dd6221d5c14a37faee3b9d0dbc573efadbc05ec99]
   script: |
     sudo script/install-clojure
     sudo script/install-leiningen
