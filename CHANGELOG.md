@@ -4,6 +4,7 @@
 
 - Added `parses` function
 - Handle when `instaparse.auto_flatten_seq.AutoFlattenSeq`s are nested in instaparse's output (e.g. enlive)
+- Serialize regex
 
 ## 0.0.2
 
