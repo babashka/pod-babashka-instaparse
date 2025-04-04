@@ -12,7 +12,7 @@ export PATH=$GRAALVM_HOME/bin:$PATH
 
 clojure -T:build uber
 
-if [ ! -f "$GRAALVM_HOME/bin/native-image" && -f "$GRAALVM_HOME/bin/gu" ]; then
+if [[ ! -f "$GRAALVM_HOME/bin/native-image" && -f "$GRAALVM_HOME/bin/gu" ]]; then
     "$GRAALVM_HOME/bin/gu" install native-image
 fi
 
