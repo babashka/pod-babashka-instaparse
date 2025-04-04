@@ -12,7 +12,9 @@ export PATH=$GRAALVM_HOME/bin:$PATH
 
 clojure -T:build uber
 
-"$GRAALVM_HOME/bin/gu" install native-image
+if [[ ! -f "$GRAALVM_HOME/bin/native-image" && -f "$GRAALVM_HOME/bin/gu" ]]; then
+    "$GRAALVM_HOME/bin/gu" install native-image
+fi
 
 args=(-jar "pod-babashka-instaparse.jar"
       -H:Name=pod-babashka-instaparse
