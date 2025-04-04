@@ -86,12 +86,16 @@
     (-> (apply insta/parses p opts)
         mark-failure)))
 
+(defn span [tree]
+  (insta/span tree))
+
 (def lookup*
   {'pod.babashka.instaparse
    {#_#_'-parser -parser
     'parse parse
     'parses parses
     'parser -parser
+    'span span
     #_#_'-call-parser -call-parser}})
 
 (defn lookup [var]
@@ -111,6 +115,7 @@
                          {"name" "parser" #_#_"code" parser-wrapper}
                          {"name" "parse"}
                          {"name" "parses"}
+                         {"name" "span"}
                          {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}
                          ;; register client side transit handlers when pod is loaded. Implementation detail.
                          {"name" "-reg-transit-handlers"
