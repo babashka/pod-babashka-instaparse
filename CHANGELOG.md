@@ -2,7 +2,7 @@
 
 ## 0.0.5
 
-- Expose `instaparse.core/span` (@wesmorgan)
+- Expose `instaparse.core/span` (@cap10morgan)
 
 ## 0.0.4
 
