@@ -25,7 +25,7 @@ Only a subset of instaparse is exposed. If you are missing functionality, please
 ``` clojure
 (require '[babashka.pods :as pods])
 
-(pods/load-pod 'org.babashka/instaparse "0.0.3")
+(pods/load-pod 'org.babashka/instaparse "0.0.5")
 
 ;; loading the pod creates the instaparse.core namespace
 
@@ -59,6 +59,6 @@ To test the native image with bb, run `bb test.clj`.
 
 ## License
 
-Copyright © 2023 Michiel Borkent
+Copyright © Michiel Borkent
 
 Distributed under the EPL 1.0 license, same as Instaparse and Clojure. See LICENSE.
