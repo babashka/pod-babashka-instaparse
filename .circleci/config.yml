@@ -189,7 +189,9 @@ jobs:
       - run:
           name: Install Clojure
           command: |
-            .circleci/script/install-clojure /usr/local
+            curl -L -O https://github.com/clojure/brew-install/releases/latest/download/posix-install.sh
+            chmod +x posix-install.sh
+            sudo ./posix-install.sh
       - run:
           name: Install Leiningen
           command: |
