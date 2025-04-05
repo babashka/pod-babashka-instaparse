@@ -207,6 +207,10 @@ jobs:
               tar xzf graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz
             fi
       - run:
+          name: Install Rosetta
+          command: |
+            sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+      - run:
           name: Build binary
           command: |
             script/compile
