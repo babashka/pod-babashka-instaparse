@@ -14,6 +14,7 @@ Only a subset of instaparse is exposed. If you are missing functionality, please
 - `parse`
 - `parses`
 - `failure?`
+- `span`
 
 ## Differences with instaparse
 
