@@ -69,25 +69,21 @@
                                     p #_(fn [s]
                                           (-call-parser p s)))))))
 
-(defn mark-failure [x]
-  (if (insta/failure? x)
-    (assoc x ::failure true)
-    x))
-
 (defn parse [ref & opts]
   (let [id (::id ref)
         p (get @parsers id)]
-    (-> (apply insta/parse p opts)
-        mark-failure)))
+    (apply insta/parse p opts)))
 
 (defn parses [ref & opts]
   (let [id (::id ref)
         p (get @parsers id)]
-    (-> (apply insta/parses p opts)
-        mark-failure)))
+    (apply insta/parses p opts)))
 
 (defn span [tree]
   (insta/span tree))
+
+(defn failure? [result]
+  (insta/failure? result))
 
 (def lookup*
   {'pod.babashka.instaparse
@@ -96,6 +92,7 @@
     'parses parses
     'parser -parser
     'span span
+    'failure? failure?
     #_#_'-call-parser -call-parser}})
 
 (defn lookup [var]
@@ -115,8 +112,8 @@
                          {"name" "parser" #_#_"code" parser-wrapper}
                          {"name" "parse"}
                          {"name" "parses"}
-                         {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}
                          {"name" "span" "arg-meta" "true"}
+                         {"name" "failure?" "arg-meta" "true"}
                          ;; register client side transit handlers when pod is loaded. Implementation detail.
                          {"name" "-reg-transit-handlers"
                           "code"  (reg-transit-handlers)}]}]}))
