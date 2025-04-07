@@ -115,8 +115,8 @@
                          {"name" "parser" #_#_"code" parser-wrapper}
                          {"name" "parse"}
                          {"name" "parses"}
-                         {"name" "span"}
                          {"name" "failure?" "code" "(defn failure? [x] (boolean (:pod.babashka.instaparse/failure x)))"}
+                         {"name" "span" "arg-meta" "true"}
                          ;; register client side transit handlers when pod is loaded. Implementation detail.
                          {"name" "-reg-transit-handlers"
                           "code"  (reg-transit-handlers)}]}]}))
@@ -143,12 +143,12 @@
 (defn serialize [x]
   (clojure.walk/prewalk serialize- x))
 
-
 (defn write-transit [v]
   (let [baos (java.io.ByteArrayOutputStream.)]
     (transit/write (transit/writer baos
                                    :json
-                                   {:handlers {java.util.regex.Pattern regex-write-handler}}) v)
+                                   {:handlers {java.util.regex.Pattern regex-write-handler}
+                                    :transform transit/write-meta}) v)
     (.toString baos "utf-8")))
 
 (defn -main [& _args]
