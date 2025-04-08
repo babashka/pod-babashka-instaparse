@@ -49,8 +49,20 @@
   #{java.util.regex.Pattern}
   \"%s\"
   str)
+
+(defrecord Failure [index reason])
+
+(babashka.pods/add-transit-read-handler!
+  \"%s\"
+  (fn [[index reason]] (Failure. index reason)))
+
+(babashka.pods/add-transit-write-handler!
+  #{Failure}
+  \"%s\"
+  (fn [^Failure f] [(.index f) (.reason f)]))
 " 
-   regex-key regex-key))
+   regex-key regex-key
+   failure-key failure-key))
 
 (def parsers
   (atom {}))
