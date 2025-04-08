@@ -5,7 +5,8 @@
             [clojure.walk :as walk]
             [cognitect.transit :as transit]
             [instaparse.core :as insta])
-  (:import [java.io PushbackInputStream])
+  (:import [java.io PushbackInputStream]
+           [instaparse.gll Failure])
   (:gen-class))
 
 (set! *warn-on-reflection* true)
@@ -34,6 +35,7 @@
   (bencode/read-bencode stream))
 
 (def regex-key (str ::regex))
+(def failure-key (str ::failure))
 
 (defn reg-transit-handlers
   []
@@ -122,12 +124,20 @@
 
 (def regex-write-handler (transit/write-handler regex-key str))
 
+(def failure-read-handler (transit/read-handler
+                           (fn [[index reason]] (Failure. index reason))))
+
+(def failure-write-handler (transit/write-handler
+                            failure-key
+                            (fn [^Failure f] [(.index f) (.reason f)])))
+
 (defn read-transit [^String v]
   (transit/read
    (transit/reader
     (java.io.ByteArrayInputStream. (.getBytes v "utf-8"))
     :json
-    {:handlers {regex-key regex-read-handler}})))
+    {:handlers {regex-key regex-read-handler
+                failure-key failure-read-handler}})))
 
 (defn auto-seq? [x]
   (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x))
@@ -144,7 +154,8 @@
   (let [baos (java.io.ByteArrayOutputStream.)]
     (transit/write (transit/writer baos
                                    :json
-                                   {:handlers {java.util.regex.Pattern regex-write-handler}
+                                   {:handlers {java.util.regex.Pattern regex-write-handler
+                                               Failure failure-write-handler}
                                     :transform transit/write-meta}) v)
     (.toString baos "utf-8")))
 
