@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.6
+
+- Fix failure serialization (@cap10morgan)
+
 ## 0.0.5
 
 - Expose `instaparse.core/span` (@cap10morgan)
