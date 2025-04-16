@@ -35,21 +35,20 @@
   (bencode/read-bencode stream))
 
 (def regex-key (str ::regex))
-(def failure-key (str ::failure))
 
 (defn reg-transit-handlers
   []
   (format
-  "
+   "
 (babashka.pods/add-transit-read-handler!
-    \"%s\"
-    re-pattern)
+  \"%s\"
+  re-pattern)
 
 (babashka.pods/add-transit-write-handler!
   #{java.util.regex.Pattern}
   \"%s\"
   str)
-" 
+"
    regex-key regex-key))
 
 (def parsers
@@ -71,10 +70,24 @@
                                     p #_(fn [s]
                                           (-call-parser p s)))))))
 
+(defn- wrap-failure
+  "The instaparse.gll.Failure class is lost in the (de)serialization between
+  pod server and client (even if we use Transit read & write handlers because
+  on the client side we don't have access to that class and create it in an SCI
+  runtime environment; so we can't implement a working write handler there).
+  So we wrap failures in a map with a qualified ::failure keyword key and then
+  look for that in our wrapper of `instaparse.core/failure?`."
+  [result]
+  (if (insta/failure? result)
+    {::failure result}
+    result))
+
 (defn parse [ref & opts]
   (let [id (::id ref)
         p (get @parsers id)]
-    (apply insta/parse p opts)))
+    (-> insta/parse
+        (apply p opts)
+        wrap-failure)))
 
 (defn parses [ref & opts]
   (let [id (::id ref)
@@ -85,7 +98,7 @@
   (insta/span tree))
 
 (defn failure? [result]
-  (insta/failure? result))
+  (contains? result ::failure))
 
 (def lookup*
   {'pod.babashka.instaparse
@@ -115,7 +128,7 @@
                          {"name" "parse"}
                          {"name" "parses"}
                          {"name" "span" "arg-meta" "true"}
-                         {"name" "failure?" "arg-meta" "true"}
+                         {"name" "failure?"}
                          ;; register client side transit handlers when pod is loaded. Implementation detail.
                          {"name" "-reg-transit-handlers"
                           "code"  (reg-transit-handlers)}]}]}))
@@ -124,20 +137,12 @@
 
 (def regex-write-handler (transit/write-handler regex-key str))
 
-(def failure-read-handler (transit/read-handler
-                           (fn [[index reason]] (Failure. index reason))))
-
-(def failure-write-handler (transit/write-handler
-                            failure-key
-                            (fn [^Failure f] [(.index f) (.reason f)])))
-
 (defn read-transit [^String v]
   (transit/read
    (transit/reader
     (java.io.ByteArrayInputStream. (.getBytes v "utf-8"))
     :json
-    {:handlers {regex-key regex-read-handler
-                failure-key failure-read-handler}})))
+    {:handlers {regex-key regex-read-handler}})))
 
 (defn auto-seq? [x]
   (instance? instaparse.auto_flatten_seq.AutoFlattenSeq x))
@@ -154,8 +159,7 @@
   (let [baos (java.io.ByteArrayOutputStream.)]
     (transit/write (transit/writer baos
                                    :json
-                                   {:handlers {java.util.regex.Pattern regex-write-handler
-                                               Failure failure-write-handler}
+                                   {:handlers {java.util.regex.Pattern regex-write-handler}
                                     :transform transit/write-meta}) v)
     (.toString baos "utf-8")))
 
