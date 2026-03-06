@@ -39,9 +39,15 @@ jobs:
 
       - name: Build native image
         shell: cmd
+        run: call script\compile.bat
+
+      - name: Run tests
+        shell: cmd
+        run: call test.clj
+
+      - name: Release
+        shell: cmd
         run: |
-          call script\compile.bat
-          echo Creating zip archive
           set /P VERSION=< resources\POD_BABASHKA_INSTAPARSE_VERSION
           set zip=pod-babashka-instaparse-%VERSION%-windows-amd64.zip
           jar -cMf %zip% pod-babashka-instaparse.exe
