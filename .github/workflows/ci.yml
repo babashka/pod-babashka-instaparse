@@ -46,6 +46,7 @@ jobs:
         run: call test.clj
 
       - name: Release
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         shell: cmd
         run: |
           set /P VERSION=< resources\POD_BABASHKA_INSTAPARSE_VERSION
