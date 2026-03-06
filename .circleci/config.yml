@@ -43,7 +43,8 @@ jobs:
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java17-22.3.0
+      GRAALVM_HOME: /home/circleci/graalvm-25
+      BABASHKA_PLATFORM: linux
       APP_PLATFORM: linux # used in release script
       APP_ARCH: amd64 # used in release script
       APP_TEST_ENV: native
@@ -73,13 +74,7 @@ jobs:
             sudo -E script/setup-musl
       - run:
           name: Download GraalVM
-          command: |
-            # script/check_glibc.sh
-            cd ~
-            if ! [ -d graalvm-ce-java17-22.3.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
-              tar xzf graalvm-ce-java17-linux-amd64-22.3.0.tar.gz
-            fi
+          command: script/install-graalvm
       - run:
           name: Build binary
           command: |
@@ -102,7 +97,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java17-22.3.0
+            - ~/graalvm-25
           key: linux-amd64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
@@ -116,9 +111,11 @@ jobs:
     working_directory: ~/repo
     environment:
       LEIN_ROOT: "true"
-      GRAALVM_HOME: /home/circleci/graalvm-ce-java17-22.3.0
+      GRAALVM_HOME: /home/circleci/graalvm-25
+      BABASHKA_PLATFORM: linux
       APP_PLATFORM: linux # used in release script
       APP_ARCH: aarch64 # used in release script
+      BABASHKA_ARCH: aarch64
       BABASHKA_STATIC: "true"
     steps:
       - checkout
@@ -141,13 +138,7 @@ jobs:
             sudo apt-get -y install build-essential zlib1g-dev
       - run:
           name: Download GraalVM
-          command: |
-            script/check_glibc.sh
-            cd ~
-            if ! [ -d graalvm-ce-java17-22.3.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-linux-aarch64-22.3.0.tar.gz
-              tar xzf graalvm-ce-java17-linux-aarch64-22.3.0.tar.gz
-            fi
+          command: script/install-graalvm
       - run:
           name: Build binary
           command: script/compile
@@ -165,17 +156,21 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java17-22.3.0
+            - ~/graalvm-25
           key: linux-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
   mac:
     macos:
-      xcode: "14.0.0"
+      xcode: 14.3.1
+    resource_class: m4pro.large
     environment:
-      GRAALVM_HOME: /Users/distiller/graalvm-ce-java17-22.3.0/Contents/Home
+      GRAALVM_HOME: /Users/distiller/graalvm-25/Contents/Home
+      BABASHKA_PLATFORM: macos
       APP_PLATFORM: macos # used in release script
+      APP_ARCH: aarch64 # used in release script
+      BABASHKA_ARCH: aarch64
       APP_TEST_ENV: native
     steps:
       - checkout
@@ -185,7 +180,7 @@ jobs:
               rm -rf ~/.gitconfig
       - restore_cache:
           keys:
-            - mac-amd64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+            - mac-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - run:
           name: Install Clojure
           command: |
@@ -196,20 +191,9 @@ jobs:
           name: Install Leiningen
           command: |
             .circleci/script/install-leiningen
-
       - run:
           name: Download GraalVM
-          command: |
-            cd ~
-            ls -la
-            if ! [ -d graalvm-ce-java17-22.3.0 ]; then
-              curl -O -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz
-              tar xzf graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz
-            fi
-      - run:
-          name: Install Rosetta
-          command: |
-            sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+          command: script/install-graalvm
       - run:
           name: Build binary
           command: |
@@ -232,8 +216,8 @@ jobs:
       - save_cache:
           paths:
             - ~/.m2
-            - ~/graalvm-ce-java17-22.3.0
-          key: mac-amd64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
+            - ~/graalvm-25
+          key: mac-aarch64-{{ checksum "deps.edn" }}-{{ checksum ".circleci/config.yml" }}
       - store_artifacts:
           path: /tmp/release
           destination: release
@@ -259,16 +243,6 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "deps.edn" }}
-  # docker:
-  #   docker:
-  #     - image: circleci/buildpack-deps:stretch
-  #   steps:
-  #     - checkout
-  #     - setup_remote_docker:
-  #         docker_layer_caching: true
-  #     - run:
-  #         name: Build Docker image
-  #         command: .circleci/script/docker
 
 workflows:
   version: 2
@@ -287,11 +261,3 @@ workflows:
             - linux
             - linux-aarch64
             - mac
-      # - docker:
-      #     filters:
-      #       branches:
-      #         only: master
-      #     requires:
-      #       - jvm
-      #       - linux
-      #       - mac
