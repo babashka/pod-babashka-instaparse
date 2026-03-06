@@ -3,6 +3,7 @@
 ## 0.0.7
 
 - Expose `add-line-and-column-info-to-metadata`
+- Drop macOS Intel builds, now building for macOS aarch64 only
 
 ## 0.0.6
 
