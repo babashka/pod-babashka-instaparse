@@ -5,11 +5,8 @@
            instaparse/instaparse {:mvn/version "1.4.12"}}
 
  :aliases {:native {:jvm-opts   ["-Dclojure.compiler.direct-linking=true"]
-                    :extra-deps {org.clojure/clojure                       {:mvn/version "1.11.1"}
-                                 com.github.clj-easy/graal-config-cheshire {:git/url   "https://github.com/clj-easy/graal-config"
-                                                                            :git/sha   "0dc2862e1b1c9871eef4c306ef77da3610a2bd93"
-                                                                            :deps/root "config/cheshire/cheshire"}
-                                 com.github.clj-easy/graal-build-time      {:mvn/version "0.1.4"}}}
+                    :extra-deps {org.clojure/clojure                  {:mvn/version "1.11.1"}
+                                 com.github.clj-easy/graal-build-time {:mvn/version "1.0.5"}}}
 
            :build ;; added by neil
            {:deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
