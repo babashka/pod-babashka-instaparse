@@ -1,0 +1,48 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GRAALVM_VERSION: "25.0.2"
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Cache deps
+        uses: actions/cache@v4
+        id: cache-deps
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('deps.edn') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1.3.3
+        with:
+          java-version: '25.0.2'
+          distribution: 'graalvm'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@13.5.2
+        with:
+          cli: latest
+          bb: latest
+
+      - name: Build native image
+        shell: cmd
+        run: |
+          call script\compile.bat
+          echo Creating zip archive
+          set /P VERSION=< resources\POD_BABASHKA_INSTAPARSE_VERSION
+          set zip=pod-babashka-instaparse-%VERSION%-windows-amd64.zip
+          jar -cMf %zip% pod-babashka-instaparse.exe
+          call bb release-artifact --file %zip%

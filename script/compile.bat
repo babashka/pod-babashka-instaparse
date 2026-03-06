@@ -16,22 +16,14 @@ echo Please set GRAALVM_HOME
 exit /b
 )
 
-bb uber
-
-call %GRAALVM_HOME%\bin\gu.cmd install native-image
+call clojure -T:build uber
 
 call %GRAALVM_HOME%\bin\native-image.cmd ^
-  "-cp" "pod-babashka-instaparse.jar" ^
+  "-jar" "pod-babashka-instaparse.jar" ^
   "-H:Name=pod-babashka-instaparse" ^
   "-H:+ReportExceptionStackTraces" ^
-  "--report-unsupported-elements-at-runtime" ^
   "--verbose" ^
   "--no-fallback" ^
-  "--no-server" ^
-  "-J-Xmx3g" ^
-  "pod.babashka.instaparse"
+  "-J-Xmx3g"
 
 if %errorlevel% neq 0 exit /b %errorlevel%
-
-echo Creating zip archive
-jar -cMf pod-babashka-instaparse-%VERSION%-windows-amd64.zip pod-babashka-instaparse.exe
