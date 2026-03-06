@@ -21,16 +21,10 @@ args=(-jar "pod-babashka-instaparse.jar"
       "-J-Xmx3g"
      )
 
-if [ "$BABASHKA_STATIC" = "true" ]; then
-    args+=("--static")
-    if [ "$BABASHKA_MUSL" = "true" ]; then
-        args+=("--libc=musl"
-               # see https://github.com/oracle/graal/issues/3398
-               "-H:CCompilerOption=-Wl,-z,stack-size=2097152")
-    else
-        # see https://github.com/oracle/graal/issues/3737
-        args+=("-H:+StaticExecutableWithDynamicLibC")
-    fi
+if [ "$BABASHKA_STATIC" = "true" ] && [ "$BABASHKA_MUSL" = "true" ]; then
+    args+=("--static" "--libc=musl"
+           # see https://github.com/oracle/graal/issues/3398
+           "-H:CCompilerOption=-Wl,-z,stack-size=2097152")
 fi
 
 "$GRAALVM_HOME/bin/native-image" "${args[@]}"
