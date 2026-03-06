@@ -22,6 +22,7 @@ call %GRAALVM_HOME%\bin\native-image.cmd ^
   "-jar" "pod-babashka-instaparse.jar" ^
   "-H:Name=pod-babashka-instaparse" ^
   "-H:+ReportExceptionStackTraces" ^
+  "--features=clj_easy.graal_build_time.InitClojureClasses" ^
   "--verbose" ^
   "--no-fallback" ^
   "-J-Xmx3g"
