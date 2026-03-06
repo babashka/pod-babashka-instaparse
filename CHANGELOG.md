@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.7
+
+- Expose `add-line-and-column-info-to-metadata`
+
 ## 0.0.6
 
 - Fix failure serialization (@cap10morgan)

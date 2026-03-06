@@ -15,6 +15,7 @@ Only a subset of instaparse is exposed. If you are missing functionality, please
 - `parses`
 - `failure?`
 - `span`
+- `add-line-and-column-info-to-metadata`
 
 ## Differences with instaparse
 
@@ -26,7 +27,7 @@ Only a subset of instaparse is exposed. If you are missing functionality, please
 ``` clojure
 (require '[babashka.pods :as pods])
 
-(pods/load-pod 'org.babashka/instaparse "0.0.5")
+(pods/load-pod 'org.babashka/instaparse "0.0.7")
 
 ;; loading the pod creates the instaparse.core namespace
 

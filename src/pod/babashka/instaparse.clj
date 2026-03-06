@@ -100,6 +100,9 @@
 (defn failure? [result]
   (contains? result ::failure))
 
+(defn add-line-and-column-info-to-metadata [& args]
+  (apply insta/add-line-and-column-info-to-metadata args))
+
 (def lookup*
   {'pod.babashka.instaparse
    {#_#_'-parser -parser
@@ -108,6 +111,7 @@
     'parser -parser
     'span span
     'failure? failure?
+    'add-line-and-column-info-to-metadata add-line-and-column-info-to-metadata
     #_#_'-call-parser -call-parser}})
 
 (defn lookup [var]
@@ -129,6 +133,7 @@
                          {"name" "parses"}
                          {"name" "span" "arg-meta" "true"}
                          {"name" "failure?"}
+                         {"name" "add-line-and-column-info-to-metadata" "arg-meta" "true"}
                          ;; register client side transit handlers when pod is loaded. Implementation detail.
                          {"name" "-reg-transit-handlers"
                           "code"  (reg-transit-handlers)}]}]}))
